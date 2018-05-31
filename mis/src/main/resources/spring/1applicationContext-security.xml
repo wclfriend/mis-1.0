@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:s="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd"
+	default-lazy-init="true">
+
+	<description>SpringSecurity安全配置</description>
+	<!-- 登录页面，不拦截 -->
+<!-- 	<s:http security="none" pattern="/web/system/login/*.jsp"/> -->
+	<!-- http安全配置 -->
+	<s:http auto-config="false" use-expressions="true" entry-point-ref="authenticationProcessingFilterEntryPoint">
+		<s:intercept-url pattern="/user/*.do" access="hasRole('ROLE_USER')"/>
+		<s:intercept-url pattern="/login/*.do" access="hasRole('ROLE_USER')"/>
+		<s:intercept-url pattern="/menu/*.do" access="hasRole('ROLE_USER')"/>
+		<s:intercept-url pattern="/role/*.do" access="hasRole('ROLE_USER')"/>
+		<s:intercept-url pattern="/web/customer/*.jsp" access="hasRole('ROLE_USER')"/>
+		<s:intercept-url pattern="/web/system/*/*.jsp" access="hasRole('ROLE_USER')"/>
+		<s:intercept-url pattern="/web/order/*.jsp" access="hasRole('ROLE_USER')"/>
+		<s:custom-filter position="FORM_LOGIN_FILTER" ref="activeAuthenticationFilter" /><!--个人用户的登录的过滤器 -->
+		<s:logout logout-url="/logout.do" logout-success-url="/" invalidate-session="true"/>
+	</s:http>
+	<!-- 个人用户 -->
+	<bean id="activeAuthenticationFilter" class="cn.com.cs.core.security.MyUsernamePasswordAuthenticationFilter">
+		<property name="authenticationManager" ref="authenticationManager" />
+		<property name="authenticationSuccessHandler" ref="successHandler"></property>
+<!-- 		<property name="authenticationFailureHandler" ref="failureHandler"></property> -->
+		<property name="filterProcessesUrl" value="/j_spring_security_check"/>
+		<property name="defaultFailureUrl" value="/login/failed.do" />
+	</bean>
+
+	<!--个人用户 -->
+	<bean id="successHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+		<property name="defaultTargetUrl" value="/login/succ.do" />
+		<!-- 登录成功，不跳转默认地址 -->
+		<property name="alwaysUseDefaultTargetUrl" value="false" />
+	</bean>
+
+<!-- 自定义登录失败事件，废弃 -->
+<!-- 	登录失败 -->
+<!-- 	<bean id="failureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler"> -->
+<!-- 		<property name="defaultFailureUrl" value="/login/failed.do" /> -->
+<!-- 		<property name="forwardToDestination" value="true"/> -->
+<!-- 	</bean> -->
+<!-- 自定义登录失败事件，废弃 -->
+
+	<s:authentication-manager alias="authenticationManager">
+		<s:authentication-provider ref="authenticationProvider">
+			<s:password-encoder ref="myPasswordEncode"></s:password-encoder>
+		</s:authentication-provider>
+	</s:authentication-manager>
+	
+	<bean id="authenticationProvider" class="cn.com.cs.core.security.AuthenticationProvider"/>
+<!-- 	<bean id="md5" class="cn.com.cs.core.security.MD5CapitalPasswordEncoder" /> -->
+	
+	<!-- 未登录的切入点 -->
+	<bean id="authenticationProcessingFilterEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+		<constructor-arg value="/"></constructor-arg>
+	</bean>
+</beans>
