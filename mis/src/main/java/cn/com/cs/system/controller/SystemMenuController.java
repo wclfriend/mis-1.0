@@ -32,6 +32,7 @@ public class SystemMenuController extends BaseController {
 	
 	@RequestMapping(value="/list", produces={"application/json;charset=UTF-8"})
 	@ResponseBody
+	@SuppressWarnings("unchecked")
 	public List<SystemMenu> list(HttpServletRequest request, HttpServletResponse response) {
 		Criteria criteria = menuService.getSession().createCriteria(SystemMenu.class);
 		criteria.addOrder(Order.asc("sortOrder"));
