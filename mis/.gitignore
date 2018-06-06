@@ -1,8 +1,9 @@
 /target/
 .classpath
 .project
-.settings
+.settings/
 /src/main/resources/*.properties
 /src/main/resources/config/*.p12
 /src/main/resources/config/*.properties
 .DS_Store
+*.DS_Store
