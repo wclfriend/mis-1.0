@@ -7,3 +7,11 @@
 /src/main/resources/config/*.properties
 .DS_Store
 *.DS_Store
+.DS_Store
+.classpath
+.settings/org.eclipse.core.resources.prefs
+.settings/org.eclipse.jdt.core.prefs
+.settings/org.eclipse.wst.common.component
+.settings/org.eclipse.wst.common.project.facet.core.xml
+src/.DS_Store
+src/main/.DS_Store
