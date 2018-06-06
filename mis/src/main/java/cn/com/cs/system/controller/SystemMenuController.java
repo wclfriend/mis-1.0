@@ -22,6 +22,11 @@ import cn.com.cs.common.json.AjaxJson;
 import cn.com.cs.system.pojo.base.menu.SystemMenu;
 import cn.com.cs.system.service.SystemMenuService;
 
+/**
+ * 系统菜单控制类
+ * @author billy
+ *
+ */
 @Scope("prototype")
 @Controller
 @RequestMapping("/menu")
